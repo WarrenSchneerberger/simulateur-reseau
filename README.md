@@ -1,10 +1,18 @@
 # simulateur-reseau
 
 ## Création de l'environnement virtuel
-`python3 -m venv venv`
+```bash
+python3 -m venv venv
+```
 ## Activation de l'environnement
-`source venv/bin/activate`
+```bash
+source venv/bin/activate
+```
 ## Installation des library
-`pip install -r requirements.txt`
+```bash
+pip install -r requirements.txt
+```
 ## Exécutuer le projet
-`python3 main.py`
+```bash
+python3 main.py
+```

@@ -90,23 +90,19 @@ def GraphiqueReseau(largeur, hauteur, positions_noeuds, position_liens, rayon_no
 
     # Quitter Pygame
     pygame.quit()
-# Main
 
+# Main
 largeur = 800
 hauteur = 600
 rayon_noeud = 20
-
 n_noeuds = random.randint(3, 30)
-
 if(n_noeuds==3):
     n_liens = random.randint((n_noeuds-1), 3)
 elif(n_noeuds==4):
     n_liens = random.randint((n_noeuds-1), 6)
 else:
     n_liens = random.randint((n_noeuds-1), ((n_noeuds*4)/2))
-
 positions_noeuds = PositionsNoeuds(n_noeuds, largeur, hauteur, rayon_noeud)
 position_liens = PositionLiens(n_liens, n_noeuds)
 GraphiqueReseau(largeur, hauteur, positions_noeuds, position_liens, rayon_noeud)
-print(position_liens)
     

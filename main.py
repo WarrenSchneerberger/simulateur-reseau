@@ -1,6 +1,6 @@
 import pygame
 import random
-
+import math
 def PositionsNoeuds(n_noeuds, largeur, hauteur, rayon_noeud):
     positions_noeuds = []
     for _ in range(n_noeuds):
@@ -69,22 +69,47 @@ def GraphiqueReseau(largeur, hauteur, positions_noeuds, position_liens, rayon_no
     fenetre = pygame.display.set_mode((largeur, hauteur))
     pygame.display.set_caption("Graphique de Réseau")
 
+    # Variables pour le déplacement des nœuds
+    dragging = False
+    dragged_node = None
+
     # Boucle principale
     continuer = True
     while continuer:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 continuer = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Clic gauche
+                    for i, position in enumerate(positions_noeuds):
+                        if math.dist(event.pos, position) <= rayon_noeud:
+                            dragging = True
+                            dragged_node = i
+            if event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    dragging = False
+                    dragged_node = None
+
+        if dragging and dragged_node is not None:
+            # Mettre à jour la position du nœud en fonction de la position de la souris
+            positions_noeuds[dragged_node] = event.pos
 
         # Effacer l'écran
         fenetre.fill(blanc)
 
+        # Dessiner les liens
         for position in position_liens:
             pygame.draw.line(fenetre, noir, positions_noeuds[position[0]], positions_noeuds[position[1]], 2)
 
-        # Dessiner les nœuds
-        for position in positions_noeuds:
+        # Dessiner les nœuds avec un numéro d'identification
+        for i, position in enumerate(positions_noeuds):
             pygame.draw.circle(fenetre, noir, position, rayon_noeud)
+            # Afficher le numéro d'identification
+            font = pygame.font.Font(None, 36)
+            text = font.render(str(i), True, blanc)
+            text_rect = text.get_rect()
+            text_rect.center = position
+            fenetre.blit(text, text_rect)
 
         pygame.display.flip()
 
@@ -105,4 +130,3 @@ else:
 positions_noeuds = PositionsNoeuds(n_noeuds, largeur, hauteur, rayon_noeud)
 position_liens = PositionLiens(n_liens, n_noeuds)
 GraphiqueReseau(largeur, hauteur, positions_noeuds, position_liens, rayon_noeud)
-    

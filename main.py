@@ -92,7 +92,8 @@ def GraphiqueReseau(largeur, hauteur, positions_noeuds, position_liens, rayon_no
 
         if dragging and dragged_node is not None:
             # Mettre à jour la position du nœud en fonction de la position de la souris
-            positions_noeuds[dragged_node] = event.pos
+            positions_noeuds[dragged_node] = pygame.mouse.get_pos()
+
 
         # Effacer l'écran
         fenetre.fill(blanc)

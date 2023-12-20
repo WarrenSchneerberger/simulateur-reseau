@@ -1,7 +1,7 @@
 import pygame
 import random
 import math
-
+from collections import deque
 
 def PositionsNoeuds(n_noeuds, largeur, hauteur, rayon_noeud):
     positions_noeuds = []
@@ -122,13 +122,23 @@ def GraphiqueReseau(largeur, hauteur, positions_noeuds, position_liens, rayon_no
     # Quitter Pygame
     pygame.quit()
 
-def distanceMax(graph, start, visited, distances):
+def distanceMax(graph, start):
+    visited = [False] * len(graph)
+    distances = [0] * len(graph)
+
+    queue = deque([(start, 0)])
     visited[start] = True
 
-    for neighbor in graph[start]:
-        if not visited[neighbor]:
-            distances[neighbor] = distances[start] + 1
-            distanceMax(graph, neighbor, visited, distances)
+    while queue:
+        current, current_distance = queue.popleft()
+
+        for neighbor in graph[current]:
+            if not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append((neighbor, current_distance + 1))
+                distances[neighbor] = current_distance + 1
+
+    return max(distances)
 
 def CalculerDiametre(positions_noeuds, position_liens):
     graph = {i: [] for i in range(len(positions_noeuds))}
@@ -140,19 +150,12 @@ def CalculerDiametre(positions_noeuds, position_liens):
     diametre = 0
 
     for start in range(len(positions_noeuds)):
-        visited = [False] * len(positions_noeuds)
-        distances = [0] * len(positions_noeuds)
+        max_distance = distanceMax(graph, start)
 
-        distanceMax(graph, start, visited, distances)
-
-        max_distance = max(distances)
         if max_distance > diametre:
             diametre = max_distance
 
     return diametre
-
-
-
 
 # Main
 largeur = 800
@@ -173,4 +176,3 @@ diametre = CalculerDiametre(positions_noeuds, position_liens)
 print("Le diamètre du réseau est :", diametre)
 
 GraphiqueReseau(largeur, hauteur, positions_noeuds, position_liens, rayon_noeud)
-

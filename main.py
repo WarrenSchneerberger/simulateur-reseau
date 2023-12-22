@@ -308,7 +308,7 @@ def GraphiqueReseau(largeur, hauteur, positions_noeuds, position_liens, rayon_no
     # Création de la surface de texte pour le message
     font_message = pygame.font.Font(None, 24)
     message_surface = font_message.render(
-        'Appuyez sur "ESPACE" pour les algorithmes & "Entrée" pour les formes canoniques', True, noir)
+        'Appuyez sur "ESPACE" pour les algorithmes & Maintenir le clic gauche pour déplacer les noeuds', True, noir)
     message_rect = message_surface.get_rect()
     message_rect.centerx = largeur // 2
     message_rect.bottom = hauteur
@@ -372,19 +372,16 @@ def GraphiqueReseau(largeur, hauteur, positions_noeuds, position_liens, rayon_no
         # Dessiner le menu d'options si la variable est True
         if draw_option_menu:
             DrawCalDistance(fenetre, noir, click, positions_noeuds, position_liens)
-        if draw_topology:
-            colorier_formes_topologiques(fenetre, positions_noeuds, position_liens, noir)
+        # if draw_topology:
+            # colorier_formes_topologiques(fenetre, positions_noeuds, position_liens, noir)
 
         # Dessiner la surface de texte du message en bas de la fenêtre
         fenetre.blit(message_surface, message_rect)
 
         pygame.display.flip()
         
-    # Dessiner la surface de texte du message en bas de la fenêtre
-    fenetre.blit(message_surface, message_rect)
     # Quitter Pygame
     pygame.quit()
-
 
 def distanceMax(graph, start):
     visited = [False] * len(graph)
@@ -403,7 +400,6 @@ def distanceMax(graph, start):
                 distances[neighbor] = current_distance + 1
 
     return max(distances)
-
 
 def CalculerDiametre(positions_noeuds, position_liens):
     graph = {i: [] for i in range(len(positions_noeuds))}
@@ -451,9 +447,6 @@ def colorier_formes_topologiques(fenetre, positions_noeuds, position_liens, noir
                 # Rejoindre le dernier nœud avec le premier pour fermer le cycle
                 pygame.draw.line(fenetre, couleur_cycle, positions_noeuds[cycle[-1]], positions_noeuds[cycle[0]], 2)
 
-    pygame.display.flip()
-
-
 def detecter_cycle(graph, node, visited, parent):
     visited.add(node)
     for neighbor in graph[node]:
@@ -476,7 +469,7 @@ if (n_noeuds == 3):
 elif (n_noeuds == 4):
     n_liens = random.randint((n_noeuds - 1), 6)
 else:
-    n_liens = random.randint((n_noeuds - 1), ((n_noeuds * 4) / 2))
+    n_liens = random.randint(n_noeuds - 1, round((n_noeuds * 4) / 2))
 positions_noeuds = PositionsNoeuds(n_noeuds, largeur, hauteur, rayon_noeud)
 position_liens = PositionLiens(n_liens, n_noeuds)
 
